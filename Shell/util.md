@@ -1,0 +1,18 @@
+# Shell常用方法
+### 获取字符串
+```shell
+str=`<command>`
+```
+
+### 字符串比较
+```shell
+“$a” == “$b”
+
+# 如果$a以"z"开头(模式匹配)那么将为true 
+[[ $a == z* ]]    # 如果$a等于z*(字符匹配),那么结果为true  [[ $a == “z*" ]]  
+
+# File globbing 和word splitting将会发生
+[ $a == z* ]
+ # 如果$a等于z*(字符匹配),那么结果为true
+[ $a == “z*" ]
+```

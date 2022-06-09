@@ -1,0 +1,74 @@
+# 示例
+## Test
+#### 温度
+```js
+ /^[-+]?[0-9]+(\.[0-9]*)?$/
+```
+
+#### IPV4地址
+```js
+/^(([01]?\d\d?|2[0-4]\d|25[0-5])\.){3}([01]?\d\d?|2[0-4]\d|25[0-5])$/
+```
+
+#### 匹配浮点数
+```js
+/-?([0-9]+(\.[0-9]*)?|\.[0-9]+)/
+```
+
+#### 校验HTTP URL
+```js
+/^https?://([^/:]+)(:(\d+))?(/.*)?$/i
+```
+
+#### 重复检查
+```js
+/^(.+)\1+$/.test("abcdabcdabcdabcd")
+// output: true
+```
+
+## Match
+#### 单词分隔
+```js
+"this is a good idea".match(/\w+/g)
+// output: ['this', 'is', 'a', 'good', 'idea']
+```
+
+#### 处理文件路径
+```js
+'/usr/local/cc.bin'.match(/^(.*)\/([^/]*)$/)
+// output: ['/usr/local/cc.bin', '/usr/local', 'cc.bin'
+```
+
+#### 字符插入
+```js
+"Toms and Jacks dot run!".replace(/(?<=\b\w+)(?=s\b)/g, "'")
+// output: Tom's and Jack's dot run!
+
+"1234567".replace(/(?<=\d)(?=(\d{3})+$)/g, ',')
+// output: 1,234,567
+
+"total: 1234567 dollors".replace(/(?<=\d)(?=(\d\d\d)+(?!\d))/g, ',')
+// output: total: 1,234,567 dollors
+```
+
+#### 捕获双引号内的内容
+```js
+'this is "good" or "bad" idea'.match(/("[^"]*")/g)
+'this is "good" or "bad" idea'.match(/(".*?")/g)
+// output: ["good", "bad"]
+```
+
+#### HTML捕获某个标签内的内容
+```js
+"this is <b>good</b> or <b>bad</b> idea".match(/<b>((?!<b>).)*?<\/b>/g)
+// output: ['<b>good</b>', '<b>bad</b>']
+```
+
+#### 去除首位空格
+```js
+const trim = (str) =>{
+	str = str.replace(/^\s+/, '')
+	str = str.replace(/\s+$/, '')
+	return str
+}
+```
