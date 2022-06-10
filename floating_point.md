@@ -10,13 +10,13 @@ $$
 
 ### 浮点数的表示形式
 
-![image-20220527161217370](/Users/bytedance/Library/Application Support/typora-user-images/image-20220527161217370.png)
+![image-20220610101107850](_assets_/image-20220610101107850.png)
 
 浮点数由阶码j和尾数S两部分组成。阶码是整数，阶符和阶码的位数m合起来反映浮点数的表示范围及小数点的实际位置；尾数是小数，其位数n反映了浮点数的精度；尾数的符号Sf浮点数的正负。
 
 ### 浮点数的表示范围
 
-![image-20220527161453898](/Users/bytedance/Library/Application Support/typora-user-images/image-20220527161453898.png)
+![image-20220527161453898](_assets_/image-20220527161453898.png)
 
 当浮点数阶码大于最大阶码时称为上溢，此时机器停止运算，进行中断溢出处理；当浮点数阶码最小阶码时称为下溢，此时溢出的数绝对值很小，通常将尾数各位强置为零，按机器零处理，此时机器可以继续运行。一旦浮点数的位数确定后，合理分配阶码和尾数的位数，直接影响浮点数的表示范围和精度。通常短实数（总位数为32位），阶码取8位（含阶符1位），尾数取24位（含数符1位）；对于长实数（总位数64位），阶码取11位（含阶符1位），尾数取53位（含数符1位）；对于临时实数（总位数80位），阶码取15位（含阶符1位），尾数取65位（含数符1位）。
 
@@ -37,7 +37,7 @@ $$
 
 浮点数一般采用IEEE指定的国际标准，形式如下：
 
-![image-20220527163433982](/Users/bytedance/Library/Application Support/typora-user-images/image-20220527163433982.png)
+![image-20220527163433982](_assets_/image-20220527163433982.png)
 
 按IEEE标准，常用的浮点数由三种：
 
@@ -51,16 +51,16 @@ $$
 
 ### 十进制数178.125的实数表示
 
-![image-20220527164616168](/Users/bytedance/Library/Application Support/typora-user-images/image-20220527164616168.png)
+![image-20220527164616168](_assets_/image-20220527164616168.png)
 
 ### 单精度图示
 
 1位符号，8位指数，23位小数。
 
-![img](https://pica.zhimg.com/80/v2-749cc641eb4d5dafd085e8c23f8826aa_1440w.jpg?source=1940ef5c)
+![img](_assets_/v2-749cc641eb4d5dafd085e8c23f8826aa_1440w.jpg)
 
 ### 双精度图示
 
 1位符号，11位指数，52位小数。
 
-![img](https://pica.zhimg.com/80/v2-48240f0e1e0dd33ec89100cbe2d30707_1440w.jpg?source=1940ef5c)
+![img](_assets_/v2-48240f0e1e0dd33ec89100cbe2d30707_1440w.jpg)
