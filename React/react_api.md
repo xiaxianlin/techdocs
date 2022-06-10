@@ -165,7 +165,7 @@ const ref = React.createRef();
 
 ##### React.createContext()
 
-创建一个上下文对象。
+创建一个上下文对象。该对象包含Context.Provider和Conetxt.Consumer两个组件。
 
 ```jsx
 const ThemeContext = React.createContext('white');
@@ -247,6 +247,30 @@ React.Children.toArray(children)
 
 
 
+### React 实例
+
+##### setState()
+
+将组件状态的更改排入队列并告诉 React 该组件及其子组件需要使用更新后的状态重新渲染。参数updater可以是下一个状态，也可以是下一个状态的生成函数。callback是一个回调函数，可选，但组件完成更新后，会回调该函数。
+
+```jsx
+setState(updater, [callback])
+
+updater = (state, props) => stateChange
+```
+
+
+
+##### forceUpdate()
+
+强制更新组件，无视shouldComponenetUpdate()的优化，一般避免调用该方法。
+
+```
+forceUpdate(callback)
+```
+
+
+
 #### Hooks
 
 ##### useState()
@@ -279,4 +303,106 @@ React.Children.toArray(children)
 
 ##### userInsertionEffect()
 
+
+
 ## ReactDOM
+
+##### createPortal()
+
+创建一个门户。门户提供了一种将子节点渲染到 DOM 节点中的方法，该 DOM 节点存在于 DOM 组件的层次结构之外。
+
+```jsx
+createPortal(child, container)
+```
+
+
+
+##### flushSync()
+
+强制 React 同步刷新提供的回调中的任何更新。这确保了 DOM 立即更新
+
+```jsx
+flushSync(callback)
+```
+
+
+
+##### render()
+
+将 React 元素渲染到所提供容器中的 DOM 中，并返回对组件的引用（或为无状态组件返回 null）。
+
+```
+render(element, container[, callback])
+```
+
+
+
+##### hydrate()
+
+与 render() 相同，但用于合成 HTML 内容由 ReactDOMServer 渲染的容器。 React 将尝试将事件侦听器附加到现有标记。
+
+```jsx
+hydrate(element, container[, callback])
+```
+
+
+
+##### unmountComponentAtNode()
+
+从 DOM 中移除已安装的 React 组件并清理其事件处理程序和状态。在v18后被root.unmout()替代。
+
+```jsx
+unmountComponentAtNode(container)
+```
+
+
+
+##### findDOMNode()
+
+如果此组件已安装到 DOM 中，则返回相应的实际 DOM 元素。
+
+```jsx
+findDOMNode(component)
+```
+
+
+
+##### createRoot()
+
+为提供的容器创建一个 React 根并返回根。 root 可用于通过 render 将 React 元素渲染到 DOM 中。
+
+```jsx
+createRoot(container[, options]);
+```
+
+
+
+##### root.render()
+
+功能与ReactDOM.render()一致。
+
+```jsx
+const root = createRoot(container);
+root.render(element);
+```
+
+
+
+##### root.unmount()
+
+功能与ReactDOM.unmountComponentAtNode()一致。
+
+```jsx
+const root = createRoot(container);
+root.unmount();
+```
+
+
+
+##### hydrateRoot()
+
+与 createRoot() 相同，但用于合成 HTML 内容由 ReactDOMServer 呈现的容器。 React 将尝试将事件侦听器附加到现有标记。
+
+```jsx
+hydrateRoot(container, element[, options])
+```
