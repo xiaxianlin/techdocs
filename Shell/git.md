@@ -1,5 +1,5 @@
 # GIT常用命令
-## 合并单个文件
+### 合并单个文件
 1. 提交单个文件
 2. 合并单个文件的commit
 
@@ -23,6 +23,8 @@ git push -f
 
 git reflog show <branch name>
 
+
+
 ## 合并commit
 ```sh
 git cherry-pick <commit>
@@ -42,3 +44,10 @@ git config --global --unset https.proxy
 # 删除远程tag
 git push origin :refs/tags/<name>
 ```
+
+### 关联远程分支
+
+```shell
+git branch -u <origin/new_branch>
+```
+

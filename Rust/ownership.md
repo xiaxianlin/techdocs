@@ -1,0 +1,161 @@
+# 所有权
+
+> 所有权是一组控制 Rust 程序如何管理内存的规则，rust使用内存通过所有权系统进行管理，该系统具有一组编译器检查的规则。如果违反任何规则，程序将无法编译。
+
+
+
+### 规则
+
+1. Rust 中的每个值都有一个称为其owner的变量
+2. 一个值在同一时间只能有一个owner
+3. 当owner变量超出作用域时，值会被销毁
+
+
+
+### 数据存放
+
+1. 变量信息存放在堆(stack)中
+2. 值信息存放在栈(heap)中
+
+
+
+### 引用（reference）
+
+引用就像一个指针，因为它是一个地址，可以按照它来访问存储在该地址的数据，该地址由其他变量拥有。与指针不同，引用保证指向特定类型的有效值。
+
+变量对引用没有所有权。
+
+通过 **&** 来获取变量的引用，又称为解引用，使用 **&** 关键字修饰的类型称为引用类型，使用 **&** 关键字修饰的变量称为引用变量。
+
+```rust
+fn say(str: &String){ // 引用类型
+  println!("{}", str);
+}
+let s = String::from("Hello");
+say(&s); // 传入引用变量
+```
+
+引用的规则：
+
+- 在任何给定时间，都可以拥有一个可变引用或任意数量的不可变引用
+- 引用必须始终有效。
+
+
+
+### 转移（transfer）
+
+声明一个结构变量，会在堆上创建一个变量信息，在栈上创建值信息，并通过**引用**关联变量和值。
+
+```rust
+let s1 = String::from("Hello");
+```
+
+通过赋值表达式，s2会在堆中拷贝一份s1的变量信息，并将引用也交给s2，交出引用后，s1会被标记为非法，指针转移过程称为**所有权转移**。
+
+```rust
+let s2 = s1;
+println!("{}, world!", s1); // Error: value borrowed here after move
+```
+
+作为函数参数传入会发生所有权转移。
+
+```rust
+fn say(word: String){
+  println!("{}", word);
+}
+fn main(){
+  let s = String::from("Tom");
+  say(s);
+  println!("{}", s); // borrow of moved value: `x`
+}
+```
+
+作为函数的返回值返回后，会发生所有权转移。
+
+```rust
+fn gives_ownership() -> String {
+  let some_string = String::from("move");
+  some_string
+}
+let s2 = gives_ownership(); // some_string的所有权转移给了s2
+```
+
+所有权的转移遵循一个标准模式：一个变量赋值给另一个变量。
+
+这种模式同样包括元组赋值。
+
+```rust
+ let x = String::from("hello");
+ let t = (12, x);
+ println!("{}", x); // borrow of moved value: `x`
+```
+
+
+
+### 克隆（clone）
+
+通过clone接口实现值的克隆，避免所有权转移。
+
+```rust
+ let s1 = String::from("hello");
+ let s2 = s1.clone();
+
+ println!("s1 = {}, s2 = {}", s1, s2);
+```
+
+堆存放的信息默认实现copy接口。其中包括以下数据类型：
+
+- 整型
+- 布尔型
+- 浮点型
+- 字符型
+- 元组
+
+
+
+### 借用（borrow）
+
+传递应用或引用赋值的动作称为借用。借用分为不可变借用和可变借用，其中不可变借用可以被无限次借用。
+
+```rust
+fn main() {
+    let s = String::from("hello");
+		let s1 = &s; // 借用
+  
+    change(&s); // 借用
+}
+
+fn change(some_string: &String) {
+    some_string.push_str(", world");
+}
+```
+
+当引用被借用后，就不可以进行可变借用。
+
+```rust
+let mut s = String::from("aaa");
+let s1 = &mut s;
+let s2 = &mut s; // Error: cannot borrow `s` as mutable more than once at a time
+println!("{}, {}", s1, s2);
+```
+
+引用借用会造成**数据竞争**，例如下列情况：
+
+- 两个或多个指针同时访问相同的数据
+- 至少有一个指针用于写入数据
+- 没有用于同步数据访问的机制
+
+当不可变借用被消费后，可以继续进行可变借用。
+
+```rust
+let mut s = String::from("hello");
+
+let r1 = &s; // no problem
+let r2 = &s; // no problem
+println!("{} and {}", r1, r2);
+// variables r1 and r2 will not be used after this point
+
+let r3 = &mut s; // no problem
+println!("{}", r3);
+```
+

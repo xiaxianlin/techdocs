@@ -94,3 +94,140 @@ let a = [3, 5]; // 填充初始值
 ```
 
 ### 函数
+
+##### 声明
+
+通过关键字 **fn** 进行函数声明，函数包含函数名、参数、函数体、返回值等。Rust 的命名规范是使用下划线连接。
+
+```rust
+fn antoher_function(){}
+```
+
+##### 参数
+
+一个函数可以拥有很多个参数，参数的命名依然是下划线连接，并且参数必须显示指定类型。
+
+```rust
+fn another_function(x: i32, unit_label: i32){}
+```
+
+##### 返回
+
+函数的返回需要声明返回类型，在rust中函数返回数据不需要return关键字，直接在最后一行使用变量或表达式，不写分号即可。
+
+```rust
+fn another_function(x: i32) -> i32 {
+	x + 1
+}
+```
+
+##### 调用
+
+直接调用
+
+```rust
+another_function(5);
+```
+
+##### 入口函数
+
+rust使用main函数作为入口函数。
+
+```rust
+fn main(){}
+```
+
+### 控制流
+
+#### if - else if - if 判断
+
+在rust里面if判断后面没有括号，直接跟随表达式，可以通过let-if获得返回值。
+
+```rust
+let number = 2;
+if number % 2 == 0 {} 
+else if number % 2 == 1 {}
+else {}
+// 使用 let-if 表达式
+let x = if true { 6 } else { 5 }; // x = 6
+```
+
+##### loop 循环
+
+使用 loop 关键字无限循环一块代码，可以使用 break 退出，可以通过let-if获得返回值。
+
+```rust
+loop {
+  if something {
+    break;
+  }
+}
+// 使用 let-loop 表达式
+let x = loop {
+  counter += 1;
+  if counter == 10 {
+    break counter;
+  }
+}; // x = 10
+```
+
+##### while 循环
+
+使用 while 关键字有条件的循环一块代码，可以使用 break 退出。
+
+```rust
+while condition {
+  // todo
+}
+```
+
+##### for-in迭代
+
+使用 for-in 可以对实现了迭代功能的对象进行遍历。
+
+```rust
+let a = [1, 2, 3];
+for e in a {
+  // todo
+}
+```
+
+##### match 控制流
+
+在 rust 中没有 switch 关键字，而是使用 match 来实现了分支匹配。match 匹配大部分时候配合枚举使用。
+
+```rust
+enum Coin {
+  Penny,
+  Nickel,
+}
+fn value_in_cents(coin: Coin) -> u8 {
+  match coin {
+    Coin::Penny => 1,
+    Coin::Nickel => 5,
+  }
+}
+```
+
+如果枚举使用关联数据，需要传入具体类型的数据或者使用 `_` 代替。在 match Option\<T> 的时候必须覆盖 None。否则会抛出异常。
+
+```rust
+let a:u32 = 2;
+match data {
+  None => 0,
+  Some(_) => 1,
+  Some(a) => a,
+}
+```
+
+可以使用 `_` 来设置默认分支，如果所有匹配都失败，则进入默认分支。
+
+```rust
+match x {
+  1 => 1,
+  _ => 0,
+}
+```
+
+同样也能用 `let-match` 语法进行匹配赋值。
+
