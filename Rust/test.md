@@ -1,0 +1,78 @@
+# 测试用例
+
+### 三要素
+
+1. 设置需要的数据或状态
+2. 运行想要测试的代码
+3. 断言结果是否符合预期
+
+### 执行命令
+
+```shell
+cargo test
+cargo test -- --test-threads=1 # 设置测试线程数
+cargo test -- --show-output # 允许打印信息
+cargo test <fn_name> # 测试指定用例
+cargo test <condition> # 测试用例名包含 condition 的用例
+cargo test -- --ignored # 忽略注释了 #[ignore] 的用例
+```
+
+### 测试模块
+
+使用宏 `#[cfg(test)]` 对模块进行声明，表示该模块是测试模块。
+
+```rust
+#[cfg(test)]
+mod tests {
+
+}
+```
+
+### 测试方法
+
+使用宏 `#[test]` 声明一个函数为测试函数。
+
+```rust
+#[test]
+fn it_works() {
+  let result = 2 + 2;
+  assert_eq!(result, 4);
+}
+```
+
+### 断言
+
+##### panic!()
+
+可以通过 panic! 强行中断表示测试失败。
+
+##### assert!()
+
+传入一个表达式，计算结果返回 true 或 false，表示测试是否通过。
+
+##### assert_eq!()
+
+传入 2 个参数，匹配是否相等。
+
+##### assert_ne!()
+
+传入 2 个参数，匹配是否不等。
+
+##### \#[should_panic]
+
+允许执行过程中调用 panic。可以是 expected 参数断言是否符合预期中断的方式。
+
+##### Result<T, E>
+
+通过返回 Result 来断言是否成功。
+
+### 自定义失败信息
+
+可以在 assert、assert_eq、assert_ne 宏后面参数跟 print! 的参数一致。
+
+```rust
+assert!(false, "false");
+assert!(false, "{}", 2);
+assert_eq!(1, 2,"{} neq {}", 1, 2);
+```
+

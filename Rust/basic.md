@@ -131,7 +131,7 @@ another_function(5);
 
 ##### 入口函数
 
-rust使用main函数作为入口函数。
+rust 使用 main 函数作为入口函数。
 
 ```rust
 fn main(){}
@@ -141,7 +141,7 @@ fn main(){}
 
 #### if - else if - if 判断
 
-在rust里面if判断后面没有括号，直接跟随表达式，可以通过let-if获得返回值。
+在 rust 里面 if 判断后面没有括号，直接跟随表达式，可以通过 `let-if` 获得返回值。
 
 ```rust
 let number = 2;
@@ -150,6 +150,15 @@ else if number % 2 == 1 {}
 else {}
 // 使用 let-if 表达式
 let x = if true { 6 } else { 5 }; // x = 6
+```
+
+在 if 判断中还有一种 `if let` 语法来处理枚举判断。
+
+```rust
+let config_max = Some(3u8);
+if let Some(max) = config_max { // max 属于在作用域类创建的变量，把 config_max 赋值 max
+  // todo
+}
 ```
 
 ##### loop 循环

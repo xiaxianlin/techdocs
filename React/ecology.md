@@ -62,6 +62,26 @@
 
 
 
+##### unstated-next
+
+文档地址：https://github.com/jamiebuilds/unstated-next/blob/master/README-zh-cn.md
+
+
+
+### 数据请求
+
+##### React Query
+
+文档地址：https://react-query.tanstack.com/
+
+
+
+##### useSWR
+
+文档地址：https://swr.vercel.app/zh-CN
+
+
+
 ### UI库
 
 ##### Antd
