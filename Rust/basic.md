@@ -238,5 +238,35 @@ match x {
 }
 ```
 
+多模式匹配
+
+```rust
+match x {
+    1|2 => true,
+    _ => false,
+}
+```
+
+范围匹配
+
+```rust
+match x {
+    1..=5 => 5,
+    _ => 0,
+}
+```
+
+结构匹配
+
+```rust
+match p {
+    Point {x, y: 0} => 'x',
+    Point {x: 0, y} => 'y',
+    Point {x, y} => 'xy',
+}
+```
+
+
+
 同样也能用 `let-match` 语法进行匹配赋值。
 

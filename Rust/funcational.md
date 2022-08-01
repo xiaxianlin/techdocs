@@ -1,0 +1,108 @@
+# 函数式语言特性
+
+### 闭包
+
+在 rust 中闭包就是一个可以保存变量的匿名函数，或者是作为参数传递的匿名函数。
+
+##### 创建匿名函数
+
+匿名函数使用 `||{}` 的写法，可以声明变量类型，也可以声明声明返回值类型，伸直 `{}` 也可以省略。
+
+```rust
+fn  add_one_v1   (x: u32) -> u32 { x + 1 }
+let add_one_v2 = |x: u32| -> u32 { x + 1 };
+let add_one_v3 = |x|             { x + 1 };
+let add_one_v4 = |x|               x + 1  ;
+```
+
+如果匿名函数不声明参数类型，那么在匿名函数的生命周期内，第一次的调用的类型就是匿名函数的参数在该作用域下的类型。
+
+```rust
+let example_closure = |x| x; // 如果后面调用匿名函数，就会报错误：type annotations needed
+
+let s = example_closure(String::from("hello"));
+let n = example_closure(5);
+```
+
+##### 捕获值
+
+闭包通过三种方式进行值的捕获：不可变借用，可变借用和获取所有权。
+
+```rust
+// 不可变借用
+let list = vec![1, 2, 3];
+println!("Before defining closure: {:?}", list);
+let only_borrows = || println!("From closure: {:?}", list);
+println!("Before calling closure: {:?}", list);
+only_borrows();
+println!("After calling closure: {:?}", list);
+// 可变借用
+let mut list = vec![1, 2, 3];
+println!("Before defining closure: {:?}", list);
+let mut borrows_mutably = || list.push(7);
+borrows_mutably();
+println!("After calling closure: {:?}", list);
+```
+
+##### Fn Trait
+
+一旦闭包捕获了引用或将值移动到闭包中，函数主体中的代码也会影响调用函数后引用或值发生的情况。闭包主体可以将捕获的值移出闭包，可以改变捕获的值，既不能移动也不能改变捕获的值，或者不能从环境中捕获任何内容。闭包从环境中捕获和处理值的方式会影响闭包实现的特征。Fn Trait 是函数和结构如何指定它们可以使用的闭包类型。
+
+- FnOnce：适用于至少可以调用一次的闭包。所有的闭包都实现了这个 trait ，因为所有的闭包都可以被调用。如果闭包将捕获的值移出其主体，也就是将捕获到的值作为返回值返回，则该闭包仅实现 FnOnce 而不是任何其他 Fn Trait，因为它只能被调用一次。
+- FnMut：适用于不会将捕获的值移出其主体的闭包，但这可能会改变捕获的值。这些闭包可以被多次调用。
+- Fn：适用于不会将捕获的值移出其主体并且不会改变捕获的值的闭包。
+
+例如在 unwrap_or_else 方法里面就实现了 FnOnce 。
+
+```rust 
+impl<T> Option<T> {
+  pub fn unwrap_or_else<F>(self, f: F) -> T
+  where
+  F: FnOnce() -> T
+  {
+    match self {
+      Some(x) => x,
+      None => f(),
+    }
+  }
+}
+```
+
+在方法 sort_by_key 方面里就实现了 FnMut，进行了多次调用。
+
+```rust
+#[derive(Debug)]
+struct Rectangle {
+  width: u32,
+  height: u32,
+}
+
+fn main() {
+  let mut list = [
+    Rectangle { width: 10, height: 1, },
+    Rectangle { width: 3, height: 5, },
+    Rectangle { width: 7, height: 12,},
+  ];
+
+ 	list.sort_by_key(|r| r.width); // 调用了3次
+  println!("{:#?}", list);
+  
+  let mut sort_operations = vec![];
+  let value = String::from("by key called");
+
+  list.sort_by_key(|r| {
+    sort_operations.push(value); // Error: cannot move out of `value`, a captured variable in an `FnMut` closure
+    r.width
+  });
+  println!("{:#?}", list);
+}
+```
+
+### 迭代
+
+迭代器模式允许依次对一系列项目执行某些任务。迭代器负责迭代每个项目并确定序列何时完成的逻辑。当使用迭代器时，不必自己重新实现该逻辑。
+
+在 rust 中迭代器是懒执行，在没有进行调用消费的时候是不会有任何副作用的。
+
+
+
