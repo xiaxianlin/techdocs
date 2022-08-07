@@ -150,3 +150,42 @@ fn user_dashboard(user: User) { }
 只需要在路由的处理函数声明请求守卫类型的参数就表示使用请求守卫，参数是请求守卫调用 `Outcome::Forward()` 返回的值。
 
 `rank` 参数决定了透传顺序。
+
+### 本地状态
+
+当非管理员用户登录时，数据库将被查询两次：一次是通过调用`User`保护的`Admin`守卫，第二次直接通过`User`保护。对于此类情况，应使用请求本地状态，如下所示：
+
+```rust
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for &'r User {
+    type Error = std::convert::Infallible;
+
+    async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error> {
+        let user_result = request.local_cache_async(async {
+            let db = request.guard::<Database>().await.succeeded()?;
+            request.cookies()
+                .get_private("user_id")
+                .and_then(|cookie| cookie.value().parse().ok())
+                .and_then(|id| db.get_user(id).ok())
+        }).await;
+
+        user_result.as_ref().or_forward(())
+    }
+}
+
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for Admin<'r> {
+    type Error = std::convert::Infallible;
+
+    async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error> {
+        let user = try_outcome!(request.guard::<&User>().await);
+        if user.is_admin {
+            Outcome::Success(Admin { user })
+        } else {
+            Outcome::Forward(())
+        }
+    }
+}
+```
+
+需要注意的时这些请求守卫提供对*借用*数据（`&'a User`和`Admin<'a>`）的访问权限，因为这些数据现在归请求的缓存所有。

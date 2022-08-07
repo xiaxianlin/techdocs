@@ -138,7 +138,70 @@ fn admin_panel_redirect() -> Redirect {
 
 和参数类型类似，都是使用 `rank` 来定义透传的跳用顺序，与参数类型透传不一样的时候，请求守卫透传可以人工控制是否继续透传。
 
-### 路由跳转
+##### 根据数据类型透传
+
+```rust
+#[post("/person", data = "<person>")]
+fn person(person: Person<'_>) { /* .. */ }
+
+#[post("/person", data = "<person>", rank = 2)]
+fn person2(person: Result<Person<'_>, Error>) { /* .. */ }
+
+#[post("/person", data = "<person>", rank = 3)]
+fn person3(person: Option<Person<'_>>) { /* .. */ }
+
+#[post("/person", data = "<person>", rank = 4)]
+fn person4(person: Person<'_>) -> &str {
+    // Note that this is only possible because the data in `person` live
+    // as long as the request through request-local cache.
+    person.name
+}
+```
+
+##### 注意事项
+
+所有的透传都必须指定 rank 参数，否则就会抛出这个异常：
+
+```rust
+Error: Rocket failed to launch due to the following route collisions:
+```
+
+### URI
+
+Rocket 的 `uri！`宏允许您健壮、类型安全和 URI 安全的方式在应用程序中构建路由的 URI。类型或路由参数不匹配在编译时被捕获，并且路由 URI 的更改会自动反映在生成的 URI 中。`uri!` 宏返回一个 `Origin` 结构，其中提供的路由的 URI 插入了给定的值。传入 `uri!` 的每个值使用值类型的 `UriDisplay` 实现在 URI 中的适当位置呈现。 `UriDisplay` 实现确保呈现的值是 URI 安全的。需要注意的是，`Origin` 实现了 `Into<Uri>`（并且通过扩展，`TryInto<Uri>`），因此可以根据需要使用 `.into()` 将其转换为 Uri，并传递给 `Redirect::to()` 等方法。
+
+```rust
+#[get("/<id>/<name>?<age>")]
+fn person(id: Option<usize>, name: &str, age: Option<u8>) { /* .. */ }
+
+uri!(person(101, "Mike Smith", Some(28))); // "/101/Mike%20Smith?age=28"
+uri!(person(name = "Mike", id = 101, age = Some(28))); // "/101/Mike?age=28"
+uri!(person(id = 101, age = Some(28), name = "Mike")); // "/101/Mike?age=28"
+uri!("/api", person(id = 101, name = "Mike", age = Some(28))); // "/api/101/Mike?age=28"
+uri!(person(101, "Mike", _)); // "/101/Mike"
+uri!(person(id = 101, name = "Mike", age = _)); // "/101/Mike"
+```
+
+##### 派生 UriDisplay
+
+可以为自定义类型派生 `UriDisplay`。对于出现在 URI 路径部分的类型，使用 `UriDisplayPath` 派生；对于出现在 URI 查询部分的类型，使用 `UriDisplayQuery` 派生。
+
+```rust
+use rocket::form::Form;
+
+#[derive(FromForm, UriDisplayQuery)]
+struct UserDetails<'r> {
+    age: Option<usize>,
+    nickname: &'r str,
+}
+
+#[post("/user/<id>?<details..>")]
+fn add_user(id: usize, details: UserDetails) { /* .. */ }
+
+uri!(add_user(120, UserDetails { age: Some(20), nickname: "Bob".into() })); // "/user/120?age=20&nickname=Bob"
+```
+
+##### 路由跳转
 
 ```rust
 #[get("/admin")]
@@ -146,4 +209,3 @@ fn admin_panel_redirect() -> Redirect {
     Redirect::to(uri!(login))
 }
 ```
-

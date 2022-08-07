@@ -41,13 +41,15 @@ mysqld_safe --skip-grant-tables
 ##### 更新 root 密码
 
 ```mysql
-UPDATE mysql.user SET authentication_string=PASSWORD('root') WHERE User='root';
+UPDATE mysql.user SET authentication_string=PASSWORD('') WHERE User='root';
 
 UPDATE mysql.user SET Password=PASSWORD('root') WHERE User='root';
 
 FLUSH PRIVILEGES;
 SET PASSWORD FOR 'root'@'0.0.0.0' = 'root';
 ALTER user 'root'@'0.0.0.0' IDENTIFIED BY 'root';
+
+SET PASSWORD FOR 'root'@'localhost' = 'password';
 ```
 
 
