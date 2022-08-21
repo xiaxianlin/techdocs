@@ -50,14 +50,7 @@ mongo -u "admin" -p "admin122"
 
 ```mongo
 usea admin;
-db.createUser({
-  user: 'root',
-  pwd: 'root',
-  roles:[{
-    role: 'root',
-    db: 'admin',
-  }]
-})
+db.createUser({ user: 'root', pwd: 'root', roles:[{ role: 'root', db: 'admin' }]})
 
 db.createUser({ user: 'test', pwd: '111111', roles: [{ role: 'readWrite', db: 'test' }] })
 ```
