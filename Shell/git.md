@@ -23,8 +23,6 @@ git push -f
 
 git reflog show <branch name>
 
-
-
 ## 合并commit
 ```sh
 git cherry-pick <commit>
