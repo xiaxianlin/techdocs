@@ -36,7 +36,7 @@ num f = 1.2;
 [x] Number g = 12; // 没有这种声明方法
 ```
 
-**Boolean**：布尔
+Boolean：布尔
 ```dart
 var a = true;
 bool b = false;

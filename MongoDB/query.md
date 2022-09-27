@@ -1,0 +1,27 @@
+# 查询
+
+
+
+### 比较指令
+
+-   $eq
+-   $gt
+-   $gte
+-   $in
+-   $lt
+-   $lte
+-   $ne
+-   $nin
+
+### 逻辑指令
+
+-   $and
+-   $not
+-   $nor
+-   $or
+
+### 元素指令
+
+-   $exists
+-   $type
+
