@@ -106,13 +106,13 @@ React DevTools 允许在 *Components* -> *View Settings* -> *Highlight updates w
 
 上面我们看到了导致重新绘制 UI 的原因，但是从什么开始调用 React 的渲染函数呢？
 
-每次**组件状态**发生变化时， React都会***安排(Scheduling)***一次渲染。
+每次**组件状态**发生变化时， React都会**安排(Scheduling)**一次渲染。
 
 **安排**渲染意味着这不会立即发生。React 将尝试为此找到最佳时机。
 
-改变**状态**意味着当我们调用`setState`函数时 React 会触发更新（在 React 钩子中，你会使用`useState`）。这不仅意味着组件的 render 函数将被调用，而且其**所有后续子组件都将重新渲染，无论它们的 props 是否已更改**。
+改变**状态**意味着当我们调用`setState`函数时 React 会触发更新（在 React hooks中，你会使用`useState`）。这不仅意味着组件的 render 函数将被调用，而且其**所有后续子组件都将重新渲染，无论它们的 props 是否已更改**。
 
-如果您的应用程序结构不佳，您可能会运行比预期更多的 JavaScript，因为更新父节点意味着运行**所有子**`render`节点的函数。
+如果您的应用程序结构不佳，您可能会运行比预期更多的 JavaScript，因为更新父节点意味着运行**所有子节点**的渲染函数。
 
 在文章的最后一部分，我们将看到一些技巧来帮助您**防止**这种开销。
 
@@ -120,12 +120,12 @@ React DevTools 允许在 *Components* -> *View Settings* -> *Highlight updates w
 
 即使组件的 props 已更改，React 也可能不会更新组件的常见原因有两个：
 
-1.  道具没有通过正确更新`setState`
-2.  对道具的引用保持不变
+1.  Props 没有通过 `setState` 正确更新
+2.  Props 的引用没有发生变化
 
-`setState`正如我们之前已经看到的，当您调用函数以更改状态（或函数组件中的`useState`钩子提供的函数）时，React 会重新渲染组件。
+`setState`正如我们之前已经看到的，当您调用函数以更改状态（或函数组件中的 `useState` hook 提供的函数）时，React 会重新渲染组件。
 
-因此，子组件仅在父组件的状态随**这些功能之一**发生变化时才会更新。
+因此，子组件仅在父组件的状态随**状态更新函数的执行**发生变化时才会更新。
 
 **不允许直接改变 props 对象，**因为这不会触发任何更改，并且 React 不会注意到这些更改。
 
@@ -133,9 +133,9 @@ React DevTools 允许在 *Components* -> *View Settings* -> *Highlight updates w
 this.props.user.name = 'Felix';
 ```
 
-不要这样做！
+<center style="color:#aaa;">不要这样做！</center>
 
-您需要更改父组件中的状态，而不是像这样更改道具。
+需要更改父组件中的状态，而不是像这样更改 props。
 
 ```javascript
 const Parent = () => {
@@ -156,9 +156,7 @@ const Child = ({ user }) => (
 );
 ```
 
-使用相应的 React 函数更改状态很重要。你可以在[这里找到 Codepen](https://codepen.io/fgerschau/pen/MWybNbY)。
-
-请注意我如何使用 更新状态`setUser`，这是我从中获得的功能`React.useState`。在类组件中与 this 等效的是`this.setState`.
+请注意如何使用更新状态函数 `setUser`，这是我从中获得的功能`React.useState`。在类组件中与 this 等效的是`this.setState`.
 
 ## 强制 React 组件重新渲染
 
@@ -166,7 +164,7 @@ const Child = ({ user }) => (
 
 但是，如果您绝对需要强制更新，您可以使用以下方法执行此操作：
 
-### 使用 React 的`forceUpdate`函数
+### 使用 React 的 `forceUpdate` 函数
 
 这个是最明显的一个。在 React 类组件中，您可以通过调用此函数来强制重新渲染：
 
@@ -176,52 +174,38 @@ this.forceUpdate();
 
 ### 在 React 钩子中强制更新
 
-在 React 挂钩中，该`forceUpdate`功能不可用。您可以强制更新*而不*更改组件状态，`React.useState`如下所示：
+在 React 挂钩中，该 `forceUpdate `功能不可用。您可以强制更新*而不*更改组件状态，`React.useState` 如下所示：
 
 ```javascript
 const [state, updateState] = React.useState();
 const forceUpdate = React.useCallback(() => updateState({}), []);
 ```
 
-我从[StackOverflow](https://stackoverflow.com/a/53215514/5503856)得到了这个。你可能永远不需要它。
+我从 [StackOverflow](https://stackoverflow.com/a/53215514/5503856) 得到了这个。你可能永远不需要它。
 
 ## 如何优化重新渲染
 
-低效重新渲染的一个例子是父组件控制子组件的状态。请记住：当组件的状态发生变化时，所有子组件都会重新渲染。
+低效重新渲染的一个例子是父组件控制子组件的状态。请记住：当组件的状态发生变化时，所有子组件都会重新执行渲染函数。
 
-我扩展了我已经用来[解释 React.memo](https://felixgerschau.com/react-performance-react-memo/)的示例，使其具有更多嵌套的子项。来试试吧。
+我扩展了我已经用来 [解释 React.memo](https://felixgerschau.com/react-performance-react-memo/) 的示例，使其具有更多嵌套的子项。来试试吧。
 
 黄色的数字是计算`render`每个组件的功能被执行的次数：
 
+<img src="_assets_/image-20220928110652841.png" alt="image-20220928110652841" style="zoom:50%;" />
 
-
-#### 油漆 0
-
-没有备忘录
-
-#### 油漆 0
-
-没有备忘录
-
-#### 油漆 0
-
-没有备忘录
-
-#### 油漆 0
-
-[在codepen](https://codepen.io/fgerschau/pen/wvKdrdM)上玩弄源代码。
+可以去 [codepen](https://codepen.io/fgerschau/pen/wvKdrdM) 上查看和操作源代码。
 
 尽管我们只更新了蓝色组件的状态，但已经触发了更多其他组件的渲染。
 
 ### 控制组件何时更新
 
-React 为我们提供了一些功能来防止这些不必要的更新。
+React 为我们提供了一些函数来防止这些不必要的更新。
 
 让我们来看看它们，在此之后，我将向您展示另一种更有效的提高渲染性能的方法。
 
-##### 反应备忘录
+##### React.Memo
 
-第一个，我之前已经放弃了，是`React.memo`。我已经写了一篇更深入的文章，但总而言之，它是一个**防止你的 React Hook 组件在 props 不变时渲染的**功能。
+第一个，我之前已经放弃了，是 `React.memo`。我已经写了一篇更深入的文章，但总而言之，它是一个**防止你的 React Hook 组件在 props 不变时渲染的**功能。
 
 一个实际的示例如下所示：
 
@@ -237,11 +221,11 @@ const TileMemo = React.memo(({ children }) => {  let updates = React.useRef(0);
 });
 ```
 
-在生产中使用它之前，您还需要了解一些更多的事情。我建议你在阅读完这篇文章后查看我[关于 React.memo 的文章](https://felixgerschau.com/react-performance-react-memo/)。
+在生产中使用它之前，您还需要了解一些更多的事情。我建议你在阅读完这篇文章后查看我 [关于 React.memo 的文章](https://felixgerschau.com/react-performance-react-memo/)。
 
-React 类的等价物是使用`React.PureComponent`.
+React 类组件的等价物是使用`React.PureComponent`.
 
-##### 应该组件更新
+##### shouldComponentUpdate
 
 这个函数是 React 的生命周期函数之一，它允许我们通过告诉 React 何时更新类组件来优化渲染性能。
 
@@ -255,7 +239,7 @@ shouldComponentUpdate(nextProps, nextState) {
 
 这个函数很容易使用：返回`true`导致 React 调用渲染函数，返回`false`阻止了这个。
 
-##### 设置关键属性
+##### 设置 key 属性
 
 在 React 中，执行以下操作是很常见的。找出它有什么问题：
 
@@ -269,11 +253,11 @@ shouldComponentUpdate(nextProps, nextState) {
 </div>
 ```
 
-这里我忘了设置`key`属性。大多数 linter 都会警告您这一点，但为什么它如此重要？
+这里我忘了设置 `key` 属性。大多数 linter 都会警告您这一点，但为什么它如此重要？
 
-在某些情况下，React 依赖于**识别组件和优化性能**`key`的属性。
+在某些情况下，React 依赖于**识别组件和优化性能** `key` 的属性。
 
-在上面的例子中，如果一个事件被添加到数组的*开头*，React 会认为第 **一个**和所有后续元素都发生了变化，并会触发这些元素的重新渲染。我们可以通过向元素添加键来防止这种情况：
+在上面的例子中，如果一个事件被添加到数组的*首位*，React 会认为*首位*和所有后续元素都发生了变化，并会触发这些元素的重新渲染。我们可以通过向元素添加键来防止这种情况：
 
 ```jsx
 <div>
@@ -284,46 +268,20 @@ shouldComponentUpdate(nextProps, nextState) {
 </div>
 ```
 
-尽量避免使用数组的索引作为键，并使用标识内容的东西。
-键只在兄弟姐妹中必须是唯一的。
+<center style="color:#aaa;">尽量避免使用数组的索引作为键，并使用标识内容的东西。</center>
+<center style="color:#aaa;">Key 在同级节点中必须是唯一的。</center>
 
 ### 组件的结构
 
 改进重新渲染的更好方法是稍微重构代码。
 
-小心放置逻辑的位置。如果您将所有内容都放在应用程序的根组件中，`React.memo`那么世界上所有的功能都无法帮助您解决性能问题。
+小心放置逻辑的位置。如果您将所有内容都放在应用程序的根组件中，`React.memo` 那么世界上所有的功能都无法帮助您解决性能问题。
 
-如果你把它放在更靠近使用数据的地方，你可能甚至不需要`React.memo`.
+如果你把它放在更靠近使用数据的地方，你可能甚至不需要 `React.memo`.
 
 查看示例的优化版本并输入一些文本：
 
-
-
-#### 油漆 0
-
-没有备忘录
-
-#### 油漆 0
-
-没有备忘录
-
-#### 油漆 0
-
-没有备忘录
-
-#### 油漆 0
-
-备忘录
-
-#### 油漆 0
-
-备忘录
-
-#### 油漆 0
-
-备忘录
-
-#### 油漆 0
+<img src="_assets_/image-20220928111326953.png" alt="image-20220928111326953" style="zoom:50%;" />
 
 您会看到，即使状态更新，**其他组件也不会重新渲染。**
 
@@ -352,4 +310,6 @@ const InputSelfHandling = () => {
 
 我打算写更多关于前端性能的文章，所以如果你想获得有关最新文章的通知，请在 Twitter 上关注我并订阅我的电子邮件列表。
 
-如果你走到这一步，你还想看看[我关于 React.memo 的文章](https://felixgerschau.com/react-performance-react-memo/)，它更深入地解释了 API、你可能遇到的一些常见陷阱，以及为什么你不应该 *总是*使用 React.memo。谢谢阅读。
+如果你走到这一步，你还想看看 [我关于 React.memo 的文章](https://felixgerschau.com/react-performance-react-memo/)，它更深入地解释了 API、你可能遇到的一些常见陷阱，以及为什么你不应该总是使用 React.memo。
+
+谢谢阅读。

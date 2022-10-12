@@ -43,7 +43,7 @@ git config --global --unset https.proxy
 git push origin :refs/tags/<name>
 ```
 
-### 关联远程分支
+## 关联远程分支
 
 ```shell
 git branch -u <origin/new_branch>
