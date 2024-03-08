@@ -1,64 +1,60 @@
-# 按钮
+# 按钮组件
 
-### ElevatedButton
+主要有悬浮按钮 `ElevatedButton()`、文本按钮 `TextButton()`、线性按钮 `OutlinedButton()`、图标按钮 `IconButton()` 以及面性按钮 `FilledButton()`。除了图标按钮外，其他按钮都可以用 `.icon()` 实现带图标的按钮。 
 
-"漂浮"按钮，默认带有阴影和灰色背景。按下后，阴影会变大。
+### 使用
 
+```dart
+const ElevatedButton(onPressed: () {}, child: const Text('normal'));
+const TextButton(onPressed: () {}, child: const Text('Submit'));
+const OutlinedButton( onPressed: () {}, child: const Text('Outlined Button'));
+const IconButton( onPressed: () {}, icon: Icon(Icons.thumb_up));
+const ElevatedButton.icon( onPressed: () {}, icon: Icon(Icons.send), label: const Text('发送'));
+const OutlinedButton.icon( onPressed: () {}, icon: Icon(Icons.add), label: const Text('添加'));
+const TextButton.icon( onPressed: () {}, icon: Icon(Icons.info), label: const Text('详情'));
+const FilledButton(onPressed: () {}, child: const Text('Fill Button'));
+```
 
+### 属性
 
-### TextButton
-
-文本按钮，默认背景透明并不带阴影。按下后，会有背景色。
-
-### OutlineButton
-
-默认有一个边框，不带阴影且背景透明。按下后，边框颜色会变亮、同时出现背景和阴影(较弱)。
-
-### IconButton
-
-一个可点击的Icon，不包括文字，默认没有背景，点击后会出现背景。
-
-
+-   autofocus: 自动聚焦
+-   child: 按钮文本
+-   onFocusChange: 焦点变化事件
+-   onHover: 悬停事件
+-   onLongPress: 长按事件
+-   onPressed: 点按事件
+-   style: 按钮样式
 
 ### ButtonStyle
 
-textStyle
+如果属性是 `MaterialStateProperty<T?>?` 则需要使用 `MaterialStateProperty.resolveWith()` 来处理。
 
-backagroundColor
+-   alignment: 按钮内容对齐方式
+-   animationDuration: 长按动画时长
+-   backgroundColor: 设置背景色
+-   elevation: 设置阴影大小
+-   fixedSize: 设置固定大小
+-   foregroundColor: 状态设置前景色
+-   iconColor: 图标颜色
+-   iconSize: 图标大小
+-   maximumSize: 最大尺寸
+-   minmumSize: 最小尺寸
+-   mouseCursor: 鼠标光标
+-   overlayColor: 当按钮被聚焦、悬停或者按压时，按钮的背景色
+-   padding: 填充尺寸
+-   shadowColor: 阴影颜色
+-   shape: 按钮形状
+-   side: 按钮边框设置
+-   tapTargetSize: 设置可按压区域
+-   textStyle: 文本样式
 
-foregroundColor
+### ButtonShape
 
-overlayColor
-
-shadowColor
-
-surfaceTintColor
-
-elevation
-
-padding
-
-minimumSize
-
-fixedSize
-
-maximumSize
-
-side
-
-shape
-
-mouseCursor
-
-visualDensity
-
-tapTargetSize
-
-animationDuration
-
-enableFeedback
-
-alignment
-
-splashFactory
-
+-   BeveledRectangleBorder
+-   CircleBorder
+-   ContinuousRectangleBorder
+-   LinearBorder
+-   MaterialStateOutlinedBorder
+-   RoundedRectangleBorder
+-   StadiumBorder
+-   StartBoder

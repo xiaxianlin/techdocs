@@ -119,3 +119,86 @@ fn read_username_from_file() -> Result<String, io::Error> {
 ```
 
 只有当函数返回的类型为 Result 和 Option 时才可以使用 ? 操作符。
+
+##### 使用 From Trait 进行错误自动转换
+
+Rust 中提供了 From Trait，在进行类型匹配时，如果提供了从一个类型转换为另一个类型的方法（实现了某个类型的 From Trait），则在编译阶段，编译器会调用响应的函数，直接将其转为相应的类型！
+
+```rust
+#[derive(Debug)]
+pub enum MyError {
+    ReadError(String),
+    ParseError(String),
+}
+
+impl From<std::io::Error> for MyError {
+    fn from(source: std::io::Error) -> Self {
+        MyError::ReadError(source.to_string())
+    }
+}
+
+impl From<std::num::ParseIntError> for MyError {
+    fn from(source: std::num::ParseIntError) -> Self {
+        MyError::ParseError(source.to_string())
+    }
+}
+
+fn read_file() -> Result<i64, MyError> {
+    let _content = fs::read_to_string("/tmp/id")?;
+    let content = _content.trim();
+    let id = content.parse::<i64>()?;
+    Ok(id)
+}
+
+fn main() -> Result<(), MyError> {
+    let id = read_file()?;
+    println!("id: {}", id);
+    Ok(())
+}
+```
+
+或者使用第三方库来进一步简化，例如`thiserror` ：
+
+```rust
+#[derive(thiserror::Error, Debug)]
+pub enum MyError {
+    #[error("io error.")]
+    IoError(#[from] std::io::Error),
+    #[error("parse error.")]
+    ParseError(#[from] std::num::ParseIntError),
+}
+
+fn read_file() -> Result<i64, MyError> {
+    // Could get compiled!
+    let content = fs::read_to_string("/tmp/id")?;
+    let id = content.parse::<i64>()?;
+    Ok(id)
+}
+
+fn main() -> Result<(), MyError> {
+    let id = read_file()?;
+    println!("id: {}", id);
+    Ok(())
+}
+```
+
+或者进一步使用 `anyhow::Result` 统一接收：
+
+```rust
+use anyhow::Result;
+use std::fs;
+
+fn read_file() -> Result<i64> {
+    // Could get compiled!
+    let content = fs::read_to_string("/tmp/id")?;
+    let id = content.parse::<i64>()?;
+    Ok(id)
+}
+
+fn main() -> Result<()> {
+    let id = read_file()?;
+    println!("id: {}", id);
+    Ok(())
+}
+```
+
