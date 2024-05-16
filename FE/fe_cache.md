@@ -42,11 +42,9 @@ User-Agent:Mozilla/5.0 (Macintosh; Intel …) Gecko/20100101 Firefox/60.0
 
 #### 服务器校验策略
 
-![CDC53580-4552-461F-B6DB-20F9FD5D8423](_assets_/CDC53580-4552-461F-B6DB-20F9FD5D8423.png)
+![](blob:tauri://localhost/7acb7491-046f-4bb1-9d48-91344a9dbf4b)
 
-图片出处：<https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching>
-
-#### 使用缓存的一些建议（来自图片出处的那篇文章）
+使用缓存的一些建议（来自图片出处的那篇文章）
 
 - 一个资源只有唯一的URL，防止多次缓存。
 - 确定服务器提供了校验token（ETag）。
@@ -152,5 +150,3 @@ self.addEventListener('fetch', function(event) {
 ### Indexed Database
 
 这玩意儿目前还是草案，有部分浏览器实现了这个功能，但是都不是很规范。就是提供了一个本地数据库，应该是NoSQL类型的。
-
-#前端
