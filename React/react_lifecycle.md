@@ -1,7 +1,5 @@
 # React生命周期
 
-!\[image-20220609145324815\](http://img.ixxl.me/articles/image-20220609145324815.png)
-
 明确的生命周期函数只有类组件才有，函数组件只能通过HOC或者Hook来模拟。
 
 - Mounting
