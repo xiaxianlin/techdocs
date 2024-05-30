@@ -1,5 +1,3 @@
-# yum命令
-
 ```sh
 # 1 安装 
 yum install package  # 安装指定的安装包package 
@@ -27,4 +25,3 @@ yum clean headers # 清除缓存目录下的 headers
 yum clean oldheaders # 清除缓存目录下旧的 headers 
 yum clean, yum clean all  # (= yum clean packages; yum clean oldheaders) 清除缓存目录下的软件包及旧的headers
 ```
-

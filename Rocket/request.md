@@ -11,7 +11,7 @@ fn new_user(user: User) { /* ... */ }
 
 如果设置 `data` 属性，那么处理函数中相同名称的参数必须实现 `FromData` ，具体实现方式可以参考[示例](https://api.rocket.rs/v0.5-rc/rocket/data/trait.FromData.html#example)。
 
-在指定 format 的数据时， 其类型为 [`MediaType`](https://api.rocket.rs/v0.5-rc/rocket/http/struct.ContentType.html#method.media_type)，也可以使用缩写。
+在指定 format 的数据时， 其类型为 `MediaType`，也可以使用缩写。
 
 ### Body 数据
 
@@ -76,7 +76,7 @@ async fn debug(data: Data<'_>) -> std::io::Result<()> {
 
 ### 表单
 
-Rocket支持开箱即用的`multipart`和`x-www-form-urlencoded`表单，由[`Form`](https://api.rocket.rs/v0.5-rc/rocket/form/struct.Form.html)数据保护和可派生[`FromForm`](https://api.rocket.rs/v0.5-rc/rocket/form/trait.FromForm.html)特性启用。只要其通用参数实现 FromForm 特征，表单就是数据保护。
+Rocket支持开箱即用的`multipart`和`x-www-form-urlencoded`表单，由`Form`数据保护和可派生`FromForm`特性启用。只要其通用参数实现 FromForm 特征，表单就是数据保护。
 
 ##### 简单表单对象
 
@@ -115,7 +115,7 @@ fn upload_form(upload: Form<Upload<'_>>) { /* .. */ }
 
 ##### 解析策略
 
-Rocket 的 FromForm 解析默认是宽松的：一个 Form\<T> 将从传入的表单成功解析，即使它包含额外的、重复的或缺少的字段。多余的或重复的将被忽略，不会对字段进行验证或解析，并且缺失的字段会在可用时用默认值填充。要更改此行为并使表单解析严格，请使用 Form<Strict<T>> 数据类型，如果有任何额外或缺失的字段，它会发出错误，而不考虑默认值。
+Rocket 的 FromForm 解析默认是宽松的：一个 Form&lt;T&gt; 将从传入的表单成功解析，即使它包含额外的、重复的或缺少的字段。多余的或重复的将被忽略，不会对字段进行验证或解析，并且缺失的字段会在可用时用默认值填充。要更改此行为并使表单解析严格，请使用 Form&lt;Strict&gt; 数据类型，如果有任何额外或缺失的字段，它会发出错误，而不考虑默认值。
 
 可以在使用 `Form<T>` 的任何地方使用 `Form<Strict<T>>`。实现 FromForm 也需要它的泛型参数。例如，可以简单地将 `Form<T>` 替换为上面的 `Form<Strict<T>>` 以获得严格解析：
 
@@ -216,7 +216,7 @@ struct Person {
 
 ##### 字段嵌套
 
-Rocket 的表单支持允许您的应用程序以任何级别的嵌套和集合来表达任何结构，将字段名称通过分隔符分隔为“键”。和 []，每一个又由 : 分隔成“索引”。换句话说，一个名字有键，一个键有索引，每一个都是其父级的严格子集。
+Rocket 的表单支持允许您的应用程序以任何级别的嵌套和集合来表达任何结构，将字段名称通过分隔符分隔为“键”。和 \[\]，每一个又由 : 分隔成“索引”。换句话说，一个名字有键，一个键有索引，每一个都是其父级的严格子集。
 
 ```rust
 use rocket::form::FromForm;
@@ -368,11 +368,11 @@ MyForm {
 
 查询字符串是 URL 编码的形式，出现在请求的 URL 中。查询参数像路径参数一样声明，但在其他方面则像常规 URL 编码的表单字段一样处理。下表总结了这个类比：
 
-| 路径语法    | 查询语法    | 路径类型                                                     | 查询类型                                                     |
-| ----------- | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `<param>`   | `<param>`   | [`FromParam`](https://api.rocket.rs/v0.5-rc/rocket/request/trait.FromParam.html) | [`FromForm`](https://api.rocket.rs/v0.5-rc/rocket/form/trait.FromForm.html) |
-| `<param..>` | `<param..>` | [`FromSegments`](https://api.rocket.rs/v0.5-rc/rocket/request/trait.FromSegments.html) | [`FromForm`](https://api.rocket.rs/v0.5-rc/rocket/form/trait.FromForm.html) |
-| `static`    | `static`    | N/A                                                          | N/A                                                          |
+| 路径语法 | 查询语法 | 路径类型 | 查询类型 |
+| --- | --- | --- | --- |
+| `<param>` | `<param>` | `FromParam` | `FromForm` |
+| `<param..>` | `<param..>` | `FromSegments` | `FromForm` |
+| `static` | `static` | N/A | N/A |
 
 因为动态参数是表单类型，所以它们可以是单个值、集合、嵌套集合或介于两者之间的任何内容，就像任何其他表单字段一样。
 
