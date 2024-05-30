@@ -1,36 +1,37 @@
 # React生命周期
 
-![image-20220609145324815](/Users/bytedance/Library/Application Support/typora-user-images/image-20220609145324815.png)
+!\[image-20220609145324815\](http://img.ixxl.me/articles/image-20220609145324815.png)
 
 明确的生命周期函数只有类组件才有，函数组件只能通过HOC或者Hook来模拟。
 
 - Mounting
 
-    - construtor()	
-    - static getDerivedStateFormProps()
-    - render()
-    - componentDidMount()
+  - construtor()
+  - static getDerivedStateFormProps()
+  - render()
+  - componentDidMount()
 
 - Updating
 
-    - static getDerivedStateFormProps()
+  - static getDerivedStateFormProps()
 
-    - shouldComponentUpdate()
+  - shouldComponentUpdate()
 
-    - render()
+  - render()
 
-    - getSnapshotBeforeUpdate()
+  - getSnapshotBeforeUpdate()
 
-    - componentDidMount()
+  - componentDidMount()
 
 - Umounting
-    - componentWillUnmount()
+
+  - componentWillUnmount()
 
 - Error Handling
 
-    - static getDerivedStateFromError()
+  - static getDerivedStateFromError()
 
-    - componentDidCatch()
+  - componentDidCatch()
 
 ### 常用函数
 
@@ -50,8 +51,6 @@
 render()
 ```
 
-
-
 ##### contructor()
 
 类组件的实例函数，如果不初始化一些数据，一般不用实现该函数。如果子类组件继承了父类组件，在该函数内需要强制调用super函数。
@@ -65,8 +64,6 @@ constructor(props) {
 }
 ```
 
-
-
 ##### componentDidMount()
 
 当组件被挂载DOM树上的时候触发，且只会触发一次。在该函数可以读取实际的DOM节点，然后进行事件绑定或者订阅。可以直接调用setState()。
@@ -74,8 +71,6 @@ constructor(props) {
 ```jsx
 componentDidMount()
 ```
-
-
 
 ##### componentDidUpdate()
 
@@ -85,8 +80,6 @@ componentDidMount()
 componentDidUpdate(prevProps, prevState, snapshot)
 ```
 
-
-
 ##### componentWillUnmount()
 
 当组件的挂载的实际DOM节点被移除的时候触发。在该函数内不可调用setState()，可以进行解绑事件或者退订等。
@@ -94,8 +87,6 @@ componentDidUpdate(prevProps, prevState, snapshot)
 ```jsx
 componentWillUnmount()
 ```
-
-
 
 ##### shouldComponentUpdate()
 
@@ -105,8 +96,6 @@ componentWillUnmount()
 shouldComponentUpdate(nextProps, nextState)
 ```
 
-
-
 ##### static getDerivedStateFromProps()
 
 该函数在render()之前调用，不管是挂载阶段还是更新阶段，在更新阶段该函数调用之后调用shouldComponentUpdate()。该函数可以获得当前的props和上一次的state，需要返回null或新的state。如果返回null，表示不更新任何东西。
@@ -114,8 +103,6 @@ shouldComponentUpdate(nextProps, nextState)
 ```jsx
 static getDerivedStateFromProps(props, state)
 ```
-
-
 
 ##### getSnapshotBeforeUpdate()
 
@@ -125,8 +112,6 @@ static getDerivedStateFromProps(props, state)
 getSnapshotBeforeUpdate(prevProps, prevState)
 ```
 
-
-
 ##### static getDerivedStateFromError()
 
 在子组件抛出错误后调用该函数，接受作为参数抛出的错误，并应返回一个state，并更新组件。
@@ -134,8 +119,6 @@ getSnapshotBeforeUpdate(prevProps, prevState)
 ```jsx
 static getDerivedStateFromError(error)
 ```
-
-
 
 ##### componentDidCatch()
 

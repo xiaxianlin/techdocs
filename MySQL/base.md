@@ -1,5 +1,3 @@
-# 基本操作
-
 /usr/local/Cellar/mysql/8.0.29_1
 
 /usr/local/etc/my.cnf
@@ -52,9 +50,6 @@ ALTER user 'root'@'0.0.0.0' IDENTIFIED BY 'root';
 SET PASSWORD FOR 'root'@'localhost' = 'password';
 ```
 
-
-
 ```mysql
 show global variables like 'port';
 ```
-
